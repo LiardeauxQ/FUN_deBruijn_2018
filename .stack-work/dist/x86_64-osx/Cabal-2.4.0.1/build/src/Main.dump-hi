@@ -1,0 +1,71 @@
+
+==================== FINAL INTERFACE ====================
+2019-02-21 21:05:41.562862 UTC
+
+interface deBruijn-0.1.0.0-FmP6EpxpszJAbht538IBFl:Main 8063
+  interface hash: 776462d9d4d730f03fb987b514d9c452
+  ABI hash: f95135e2744381a364ddd76c2b5a5e3e
+  export-list hash: d88ccb423b573396e4dabbb2bbef062e
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: 304d54461d9c82d343c8527b06b0f850
+  opt_hash: 6faf2de08de32d19db9870899d88e59a
+  hpc_hash: 93b885adfe0da089cdf634904fd59f71
+  plugin_hash: ad164012d6b1e14942349d58b1132007
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  Main.main
+module dependencies: Lib
+package dependencies: base-4.12.0.0* ghc-prim-0.5.3
+                      integer-gmp-1.0.2.0
+orphans: base-4.12.0.0:GHC.Float base-4.12.0.0:GHC.Base
+family instance modules: base-4.12.0.0:Control.Applicative
+                         base-4.12.0.0:Data.Functor.Const
+                         base-4.12.0.0:Data.Functor.Identity base-4.12.0.0:Data.Monoid
+                         base-4.12.0.0:Data.Semigroup.Internal base-4.12.0.0:GHC.Generics
+                         base-4.12.0.0:GHC.IO.Exception
+import  -/  base-4.12.0.0:Prelude 5c01365ec01f83bd405ac01cbb9a8d76
+import  -/  base-4.12.0.0:System.IO 7d8c7a747c93b42b043d691b66e1809e
+import  -/  Lib b3f767ec9f76544f0e91ea50d671394a
+  exports: 615ffe76c0c249d8d41675629ba4723d
+import  -/  ghc-prim-0.5.3:GHC.Types 57064c9f957b09bc2e360061ad5cae0b
+48d50f9e779d8e48e8382f1a31198e89
+  $trModule :: GHC.Types.Module
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.Module Main.$trModule3 Main.$trModule1) -}
+ac25b76404d92430eb539dfdbcfa443e
+  $trModule1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS Main.$trModule2) -}
+75470a5bac360ea852f8283a062f843f
+  $trModule2 :: GHC.Prim.Addr#
+  {- HasNoCafRefs, Unfolding: ("Main"#) -}
+3b17decd128afdc5c284b31f7180993d
+  $trModule3 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS Main.$trModule4) -}
+0fa0e17986b3c1c5a336d04c534ec660
+  $trModule4 :: GHC.Prim.Addr#
+  {- HasNoCafRefs,
+     Unfolding: ("deBruijn-0.1.0.0-FmP6EpxpszJAbht538IBFl"#) -}
+5ea76051c682ba9f32dc13bd514bb44c
+  main :: GHC.Types.IO ()
+  {- Arity: 1,
+     Unfolding: (GHC.IO.Handle.Text.hPutStr'
+                   GHC.IO.Handle.FD.stdout
+                   Main.main1
+                   GHC.Types.True) -}
+06f56f77a0b497145124126474b308e8
+  main1 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# Main.main2) -}
+797f855d965a954b1b563fab8f15b099
+  main2 :: GHC.Prim.Addr#
+  {- HasNoCafRefs, Unfolding: ("test"#) -}
+trusted: safe
+require own pkg trusted: False
+module header:
+  Nothing
+declaration docs:
+arg docs:
+
