@@ -21,6 +21,8 @@ clean:
 	@rm -f $(NAME)
 	@printf "Clean: OK\n"
 
-re: clean all
+fclean: clean
+
+re: fclean all
 
 .PHONY: re clean all

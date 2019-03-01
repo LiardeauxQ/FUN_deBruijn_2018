@@ -22,7 +22,30 @@ db n all
             inv_word = slice (size + 1 - n) (size + 1) new_inv_all
 
 deBruijn :: Int -> String -> String
-deBruijn n alphabet = [alphabet !! x | x <- cleanSequence(db n (listOfN n 0))]
+deBruijn n alphabet
+    | n <= 0 = ""
+    | otherwise = [alphabet !! x | x <- cleanSequence(db n (listOfN n 0))]
 
 main :: IO ()
-main = putStrLn("test")
+main = getArgs >>= parse
+
+
+parse ["--check"] = usage >> exit
+parse ["--unique"] = usage >> exit
+parse ["--clean"] = usage >> exit
+parse [] = usage >> exit
+parse fs = do
+        let order = read(fs !! 0) :: Int
+
+        putStrLn(deBruijn order "01") >> exit
+
+usage   = do
+            putStrLn("USAGE: ./deBruijn n [a] [--check|--unique|--clean]\n")
+            putStrLn("\t--check\t\tcheck if a sequence is a de Bruijn sequence")
+            putStrLn("\t--unique\tcheck if 2 sequences are distinct de Bruijn sequences")
+            putStrLn("\t--clean\t\tlist cleaning")
+            putStrLn("\tn\t\torder of the sequence")
+            putStrLn("\ta\t\talphabet [def: \"01\"]")
+
+exit    = exitWith ExitSuccess
+die     = exitWith (ExitFailure 84)
