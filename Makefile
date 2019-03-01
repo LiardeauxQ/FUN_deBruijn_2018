@@ -18,9 +18,9 @@ $(NAME):
 	@cp $(BIN_PATH)/bin/deBruijn-exe $(NAME)
 
 clean:
-	@rm $(NAME)
+	@rm -f $(NAME)
 	@printf "Clean: OK\n"
 
-re: fclean all
+re: clean all
 
-.PHONY: re fclean all
+.PHONY: re clean all
