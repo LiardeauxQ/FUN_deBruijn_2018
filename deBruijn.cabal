@@ -27,7 +27,8 @@ source-repository head
 
 library
   exposed-modules:
-      Lib
+      Lib,
+      DeBruijn
   other-modules:
       Paths_deBruijn
   hs-source-dirs:

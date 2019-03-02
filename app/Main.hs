@@ -1,56 +1,66 @@
 module Main where
 
 import Lib
+import DeBruijn
 import Data.List
 import Data.Maybe
 import Text.Read
---import Debug.Trace
+import Debug.Trace
 import System.Environment
 import System.Exit
 
+checkSequenceConformity :: String -> String -> Bool
+checkSequenceConformity [] [] = False
+checkSequenceConformity [] _  = True
+checkSequenceConformity (x:xs) alphabet
+    | isInfixOf (x:[]) alphabet = checkSequenceConformity xs alphabet
+    | otherwise = False
 
-cleanSequence :: [Int] -> [Int]
-cleanSequence xs = reverse (removeSameValues (reverse xs) 0)
+execCheckOption :: String -> String -> Maybe Int -> IO ()
+execCheckOption sequence alphabet order = do
+        if checkSequenceConformity sequence alphabet == False
+            then usage
+        else
+            case order of
+                Just n -> if isDeBruijn sequence n alphabet
+                            then putStrLn("OK")
+                        else putStrLn("KO")
+                Nothing -> usage
 
-db :: Int -> [Int] -> [Int]
-db n all
-    | isInfixOf word all == False = db n new_all
-    | isInfixOf inv_word all == False = db n new_inv_all
-    | otherwise = all
-    where   size = length all
-            new_all = all ++ [1]
-            new_inv_all = all ++ [0]
-            word = slice (size + 1 - n) (size + 1) new_all
-            inv_word = slice (size + 1 - n) (size + 1) new_inv_all
-
-deBruijn :: Int -> String -> String
-deBruijn n alphabet
-    | n <= 0 = ""
-    | otherwise = [alphabet !! x | x <- cleanSequence(db n (listOfN n 0))]
 
 main :: IO ()
 main = getArgs >>= parse 
 
-parse [n, alphabet, "--check"]  = usage >> exit
-parse [n, alphabet, "--unique"] = usage >> exit
-parse [n, alphabet, "--clean"]  = usage >> exit
-parse [n, "--check"]            = usage >> exit
-parse [n, "--unique"]           = usage >> exit
-parse [n, "--clean"]            = usage >> exit
+parse [n, alphabet, "--check"]  = do
+        line <- getLine
+        execCheckOption line alphabet (readMaybe(n) :: Maybe Int)
+        
+parse [n, alphabet, "--unique"] = usage
+parse [n, alphabet, "--clean"]  = usage
+parse [n, "--check"]            = do
+        line <- getLine
+        execCheckOption line "01" (readMaybe(n) :: Maybe Int)
+
+parse [n, "--unique"]           = usage
+parse [n, "--clean"]            = usage
+
+
 parse [n, alphabet]             = do
         let order = readMaybe(n) :: Maybe Int
 
         case order of
             Just x -> if length alphabet <= 1
                         then usage >> quitFailure
-                      else putStrLn(deBruijn x alphabet) >> exit
+                      else putStrLn(deBruijn x alphabet)
             Nothing -> usage >> quitFailure
+
 parse [n]                       = do
         let order = readMaybe(n) :: Maybe Int
 
         case order of
             Just n -> putStrLn(deBruijn n "01") >> exit
             Nothing -> usage >> quitFailure
+
 parse []                        = usage >> quitFailure
 parse otherwise                 = usage >> quitFailure
 
@@ -64,3 +74,4 @@ usage   = do
 
 exit            = exitWith ExitSuccess
 quitFailure     = exitWith (ExitFailure 84)
+
