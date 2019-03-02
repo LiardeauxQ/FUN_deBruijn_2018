@@ -13,13 +13,14 @@ checkSequenceConformity :: String -> String -> Bool
 checkSequenceConformity [] [] = False
 checkSequenceConformity [] _  = True
 checkSequenceConformity (x:xs) alphabet
+    | length alphabet <= 1 = False
     | isInfixOf (x:[]) alphabet = checkSequenceConformity xs alphabet
     | otherwise = False
 
 execCheckOption :: String -> String -> Maybe Int -> IO ()
 execCheckOption sequence alphabet order = do
         if checkSequenceConformity sequence alphabet == False
-            then usage
+            then usage >> quitFailure
         else
             case order of
                 Just n -> if isDeBruijn sequence n alphabet
@@ -27,6 +28,19 @@ execCheckOption sequence alphabet order = do
                         else putStrLn("KO")
                 Nothing -> usage
 
+execUniqueOption :: String -> String -> String -> Maybe Int -> IO ()
+execUniqueOption seq1 seq2 alphabet order = do
+        if checkSequenceConformity seq1 alphabet == False
+            && checkSequenceConformity seq2 alphabet == False
+            then usage >> quitFailure
+        else
+            case order of
+                Just n -> if isDeBruijn seq1 n alphabet
+                          && isDeBruijn seq2 n alphabet
+                          && isSameDeBruijn seq1 seq2 0
+                            then putStrLn("OK")
+                        else putStrLn("KO")
+                Nothing -> usage
 
 main :: IO ()
 main = getArgs >>= parse 
@@ -34,16 +48,23 @@ main = getArgs >>= parse
 parse [n, alphabet, "--check"]  = do
         line <- getLine
         execCheckOption line alphabet (readMaybe(n) :: Maybe Int)
-        
-parse [n, alphabet, "--unique"] = usage
+
+parse [n, alphabet, "--unique"] = do
+        seq1 <- getLine
+        seq2 <- getLine
+        execUniqueOption seq1 seq2 alphabet (readMaybe(n) :: Maybe Int)
+
 parse [n, alphabet, "--clean"]  = usage
 parse [n, "--check"]            = do
         line <- getLine
         execCheckOption line "01" (readMaybe(n) :: Maybe Int)
 
-parse [n, "--unique"]           = usage
-parse [n, "--clean"]            = usage
+parse [n, "--unique"]           = do
+        seq1 <- getLine
+        seq2 <- getLine
+        execUniqueOption seq1 seq2 "01" (readMaybe(n) :: Maybe Int)
 
+parse [n, "--clean"]            = usage
 
 parse [n, alphabet]             = do
         let order = readMaybe(n) :: Maybe Int
@@ -74,4 +95,3 @@ usage   = do
 
 exit            = exitWith ExitSuccess
 quitFailure     = exitWith (ExitFailure 84)
-
