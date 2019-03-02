@@ -11,11 +11,14 @@ import System.Exit
 
 checkSequenceConformity :: String -> String -> Bool
 checkSequenceConformity [] [] = False
-checkSequenceConformity [] _  = True
+checkSequenceConformity [] _ = True
 checkSequenceConformity (x:xs) alphabet
     | length alphabet <= 1 = False
     | isInfixOf (x:[]) alphabet = checkSequenceConformity xs alphabet
     | otherwise = False
+
+
+-- Check Option --
 
 execCheckOption :: String -> String -> Maybe Int -> IO ()
 execCheckOption sequence alphabet order = do
@@ -26,7 +29,9 @@ execCheckOption sequence alphabet order = do
                 Just n -> if isDeBruijn sequence n alphabet
                             then putStrLn("OK")
                         else putStrLn("KO")
-                Nothing -> usage
+                Nothing -> usage >> quitFailure
+
+-- Unique Option --
 
 execUniqueOption :: String -> String -> String -> Maybe Int -> IO ()
 execUniqueOption seq1 seq2 alphabet order = do
@@ -40,10 +45,61 @@ execUniqueOption seq1 seq2 alphabet order = do
                           && isSameDeBruijn seq1 seq2 0
                             then putStrLn("OK")
                         else putStrLn("KO")
-                Nothing -> usage
+                Nothing -> usage >> quitFailure
+
+-- Clean Option --
+
+getSequenceArray :: String -> Int -> IO [String]
+getSequenceArray alphabet order = do
+        line <- getLine
+        if line == "END"
+            then return []
+        else do
+            nextArray <- getSequenceArray alphabet order
+            if isDeBruijn line order alphabet == False
+                then return (nextArray)
+            else
+                return (line:nextArray)
+
+
+compareUniqueSequences :: String -> [String] -> Bool
+compareUniqueSequences _ [] = True
+compareUniqueSequences sequence (x:xs)
+    | isSameDeBruijn sequence x 0 == False = False
+    | otherwise = compareUniqueSequences sequence xs
+
+
+parseUniqueSequences :: [String] -> Int -> [String]
+parseUniqueSequences [] _ = []
+parseUniqueSequences xs index
+    | index >= length xs = []
+    | compareUniqueSequences (xs !! index) cleanArray = (xs !! index):parsingArray
+    | otherwise = parsingArray
+    where cleanArray = take index xs
+          parsingArray = parseUniqueSequences xs (index + 1)
+
+
+checkUSecsConform :: [String] -> String -> Int -> [String]
+checkUSecsConform [] _ _ = []
+checkUSecsConform (x:xs) alphabet order 
+    | length alphabet ^ order == size = x:checkUSecsConform xs alphabet order
+    | otherwise = checkUSecsConform xs alphabet order
+    where size = length x
+
+execCleanOption :: String -> Maybe Int -> IO ()
+execCleanOption alphabet order = do 
+        case order of
+            Just n -> do
+                sequences <- getSequenceArray alphabet n
+                mapM_ putStrLn $ checkUSecsConform (parseUniqueSequences sequences 0) alphabet n
+            Nothing -> usage >> quitFailure
+
+-- Main --
 
 main :: IO ()
 main = getArgs >>= parse 
+
+-- Parse Arguments --
 
 parse [n, alphabet, "--check"]  = do
         line <- getLine
@@ -54,7 +110,7 @@ parse [n, alphabet, "--unique"] = do
         seq2 <- getLine
         execUniqueOption seq1 seq2 alphabet (readMaybe(n) :: Maybe Int)
 
-parse [n, alphabet, "--clean"]  = usage
+parse [n, alphabet, "--clean"]  = execCleanOption alphabet (readMaybe(n) :: Maybe Int)
 parse [n, "--check"]            = do
         line <- getLine
         execCheckOption line "01" (readMaybe(n) :: Maybe Int)
@@ -64,7 +120,7 @@ parse [n, "--unique"]           = do
         seq2 <- getLine
         execUniqueOption seq1 seq2 "01" (readMaybe(n) :: Maybe Int)
 
-parse [n, "--clean"]            = usage
+parse [n, "--clean"]            = execCleanOption "01" (readMaybe(n) :: Maybe Int)
 
 parse [n, alphabet]             = do
         let order = readMaybe(n) :: Maybe Int
@@ -84,6 +140,8 @@ parse [n]                       = do
 
 parse []                        = usage >> quitFailure
 parse otherwise                 = usage >> quitFailure
+
+-- Usage --
 
 usage   = do
             putStrLn("USAGE: ./deBruijn n [a] [--check|--unique|--clean]\n")

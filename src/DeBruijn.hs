@@ -45,5 +45,5 @@ isSameDeBruijn :: String -> String -> Int -> Bool
 isSameDeBruijn [] [] _ = False
 isSameDeBruijn seq1@(x:xs) seq2@(y:ys) shift
     | shift == length seq2 = True
-    | isInfixOf seq1 seq2 = False
+    | compareString seq1 seq2 = False
     | otherwise = isSameDeBruijn seq1 (rotate seq2 1) (shift + 1)
