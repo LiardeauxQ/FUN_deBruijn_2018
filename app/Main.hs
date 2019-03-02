@@ -2,6 +2,8 @@ module Main where
 
 import Lib
 import Data.List
+import Data.Maybe
+import Text.Read
 --import Debug.Trace
 import System.Environment
 import System.Exit
@@ -27,17 +29,30 @@ deBruijn n alphabet
     | otherwise = [alphabet !! x | x <- cleanSequence(db n (listOfN n 0))]
 
 main :: IO ()
-main = getArgs >>= parse
+main = getArgs >>= parse 
 
+parse [n, alphabet, "--check"]  = usage >> exit
+parse [n, alphabet, "--unique"] = usage >> exit
+parse [n, alphabet, "--clean"]  = usage >> exit
+parse [n, "--check"]            = usage >> exit
+parse [n, "--unique"]           = usage >> exit
+parse [n, "--clean"]            = usage >> exit
+parse [n, alphabet]             = do
+        let order = readMaybe(n) :: Maybe Int
 
-parse ["--check"] = usage >> exit
-parse ["--unique"] = usage >> exit
-parse ["--clean"] = usage >> exit
-parse [] = usage >> exit
-parse fs = do
-        let order = read(fs !! 0) :: Int
+        case order of
+            Just x -> if length alphabet <= 1
+                        then usage >> quitFailure
+                      else putStrLn(deBruijn x alphabet) >> exit
+            Nothing -> usage >> quitFailure
+parse [n]                       = do
+        let order = readMaybe(n) :: Maybe Int
 
-        putStrLn(deBruijn order "01") >> exit
+        case order of
+            Just n -> putStrLn(deBruijn n "01") >> exit
+            Nothing -> usage >> quitFailure
+parse []                        = usage >> quitFailure
+parse otherwise                 = usage >> quitFailure
 
 usage   = do
             putStrLn("USAGE: ./deBruijn n [a] [--check|--unique|--clean]\n")
@@ -47,5 +62,5 @@ usage   = do
             putStrLn("\tn\t\torder of the sequence")
             putStrLn("\ta\t\talphabet [def: \"01\"]")
 
-exit    = exitWith ExitSuccess
-die     = exitWith (ExitFailure 84)
+exit            = exitWith ExitSuccess
+quitFailure     = exitWith (ExitFailure 84)

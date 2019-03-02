@@ -29,12 +29,12 @@ version :: Version
 version = Version [0,1,0,0] []
 bindir, libdir, dynlibdir, datadir, libexecdir, sysconfdir :: FilePath
 
-bindir     = "/home/quentin/Documents/Epitech/Tek2/FUN/FUN_deBruijn_2018/.stack-work/install/x86_64-linux-tinfo6/lts-12.8/8.4.3/bin"
-libdir     = "/home/quentin/Documents/Epitech/Tek2/FUN/FUN_deBruijn_2018/.stack-work/install/x86_64-linux-tinfo6/lts-12.8/8.4.3/lib/x86_64-linux-ghc-8.4.3/deBruijn-0.1.0.0-3y7lalbVcR6Jq5mG6ZfyWc"
-dynlibdir  = "/home/quentin/Documents/Epitech/Tek2/FUN/FUN_deBruijn_2018/.stack-work/install/x86_64-linux-tinfo6/lts-12.8/8.4.3/lib/x86_64-linux-ghc-8.4.3"
-datadir    = "/home/quentin/Documents/Epitech/Tek2/FUN/FUN_deBruijn_2018/.stack-work/install/x86_64-linux-tinfo6/lts-12.8/8.4.3/share/x86_64-linux-ghc-8.4.3/deBruijn-0.1.0.0"
-libexecdir = "/home/quentin/Documents/Epitech/Tek2/FUN/FUN_deBruijn_2018/.stack-work/install/x86_64-linux-tinfo6/lts-12.8/8.4.3/libexec/x86_64-linux-ghc-8.4.3/deBruijn-0.1.0.0"
-sysconfdir = "/home/quentin/Documents/Epitech/Tek2/FUN/FUN_deBruijn_2018/.stack-work/install/x86_64-linux-tinfo6/lts-12.8/8.4.3/etc"
+bindir     = "/home/quentin/Documents/Epitech/Tek2/FUN/FUN_deBruijn_2018/.stack-work/install/x86_64-linux-tinfo6/lts-12.18/8.4.4/bin"
+libdir     = "/home/quentin/Documents/Epitech/Tek2/FUN/FUN_deBruijn_2018/.stack-work/install/x86_64-linux-tinfo6/lts-12.18/8.4.4/lib/x86_64-linux-ghc-8.4.4/deBruijn-0.1.0.0-3y7lalbVcR6Jq5mG6ZfyWc"
+dynlibdir  = "/home/quentin/Documents/Epitech/Tek2/FUN/FUN_deBruijn_2018/.stack-work/install/x86_64-linux-tinfo6/lts-12.18/8.4.4/lib/x86_64-linux-ghc-8.4.4"
+datadir    = "/home/quentin/Documents/Epitech/Tek2/FUN/FUN_deBruijn_2018/.stack-work/install/x86_64-linux-tinfo6/lts-12.18/8.4.4/share/x86_64-linux-ghc-8.4.4/deBruijn-0.1.0.0"
+libexecdir = "/home/quentin/Documents/Epitech/Tek2/FUN/FUN_deBruijn_2018/.stack-work/install/x86_64-linux-tinfo6/lts-12.18/8.4.4/libexec/x86_64-linux-ghc-8.4.4/deBruijn-0.1.0.0"
+sysconfdir = "/home/quentin/Documents/Epitech/Tek2/FUN/FUN_deBruijn_2018/.stack-work/install/x86_64-linux-tinfo6/lts-12.18/8.4.4/etc"
 
 getBinDir, getLibDir, getDynLibDir, getDataDir, getLibexecDir, getSysconfDir :: IO FilePath
 getBinDir = catchIO (getEnv "deBruijn_bindir") (\_ -> return bindir)
