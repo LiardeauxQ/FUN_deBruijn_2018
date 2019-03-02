@@ -6,25 +6,26 @@ module DeBruijn
 
 import Lib
 import Data.List
+import Debug.Trace
 
 cleanSequence :: [Int] -> [Int]
 cleanSequence xs = reverse (removeSameValues (reverse xs) 0)
 
-db :: Int -> [Int] -> [Int]
-db n all
-    | isInfixOf word all == False = db n new_all
-    | isInfixOf inv_word all == False = db n new_inv_all
-    | otherwise = all
-    where   new_all = all ++ [1]
-            new_inv_all = all ++ [0]
-            size = length new_all
-            word = slice (size - n) size new_all
-            inv_word = slice (size - n) size new_inv_all
+db :: Int -> Int -> Int -> [Int] -> [Int]
+db alphabet_size n index all
+    | index < 0 = all
+    | isInfixOf word all == False = db alphabet_size n alphabet_size new_all
+    | otherwise = db alphabet_size n (index - 1) all
+    where new_all = all ++ [index]
+          size = length new_all
+          word = slice (size - n) size new_all
+
 
 deBruijn :: Int -> String -> String
 deBruijn n alphabet
     | n <= 0 = ""
-    | otherwise = [alphabet !! x | x <- cleanSequence(db n $ listOfN n 0)]
+    | otherwise = [alphabet !! x | x <- cleanSequence(db size n size $ listOfN n 0)]
+    where size = length alphabet - 1
 
 
 splitDBSequence :: [a] -> Int -> Int -> [[a]]
@@ -35,11 +36,13 @@ splitDBSequence all@(x:xs) n s
     where word = slice s (s + n - 1) all
           nDiff = n - length word
 
+
 isDeBruijn :: String -> Int -> String -> Bool
 isDeBruijn xs n alphabet
     | length splitSequence == length alphabet ^ n = True
     | otherwise = False
     where splitSequence = nub $ splitDBSequence xs n 0 
+
 
 isSameDeBruijn :: String -> String -> Int -> Bool
 isSameDeBruijn [] [] _ = False

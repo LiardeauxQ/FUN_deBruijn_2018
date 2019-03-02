@@ -17,7 +17,6 @@ checkSequenceConformity (x:xs) alphabet
     | isInfixOf (x:[]) alphabet = checkSequenceConformity xs alphabet
     | otherwise = False
 
-
 -- Check Option --
 
 execCheckOption :: String -> String -> Maybe Int -> IO ()
@@ -86,6 +85,7 @@ checkUSecsConform (x:xs) alphabet order
     | otherwise = checkUSecsConform xs alphabet order
     where size = length x
 
+
 execCleanOption :: String -> Maybe Int -> IO ()
 execCleanOption alphabet order = do 
         case order of
@@ -150,6 +150,7 @@ usage   = do
             putStrLn("\t--clean\t\tlist cleaning")
             putStrLn("\tn\t\torder of the sequence")
             putStrLn("\ta\t\talphabet [def: \"01\"]")
+
 
 exit            = exitWith ExitSuccess
 quitFailure     = exitWith (ExitFailure 84)
