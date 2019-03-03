@@ -39,6 +39,7 @@ splitDBSequence all@(x:xs) n s
 
 isDeBruijn :: String -> Int -> String -> Bool
 isDeBruijn xs n alphabet
+    | length xs /= length alphabet ^ n = False
     | length splitSequence == length alphabet ^ n = True
     | otherwise = False
     where splitSequence = nub $ splitDBSequence xs n 0 
