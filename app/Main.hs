@@ -21,8 +21,10 @@ checkSequenceConformity (x:xs) alphabet
 
 execCheckOption :: String -> String -> Maybe Int -> IO ()
 execCheckOption sequence alphabet order = do
-        if checkSequenceConformity sequence alphabet == False
+        if length alphabet <= 1
             then usage >> quitFailure
+        else if checkSequenceConformity sequence alphabet == False
+            then putStrLn("KO")
         else
             case order of
                 Just n -> if isDeBruijn sequence n alphabet
