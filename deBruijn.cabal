@@ -4,16 +4,16 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 8bb30ebdeed34a0c7443e2b5c6c7980ce546431441965a86e77a49519fdf4d2d
+-- hash: 012f99075cceadb5d551468df2561d90ec35650c30c1e18cc81739e1f6f6be30
 
 name:           deBruijn
 version:        0.1.0.0
 description:    Please see the README on GitHub at <https://github.com/githubuser/deBruijn#readme>
 homepage:       https://github.com/githubuser/deBruijn#readme
 bug-reports:    https://github.com/githubuser/deBruijn/issues
-author:         Author name here
-maintainer:     example@example.com
-copyright:      2019 Author name here
+author:         Quentin Liardeaux
+maintainer:     quentin.liardeaux@epitech.eu
+copyright:      2019 Quentin Liardeaux
 license:        BSD3
 license-file:   LICENSE
 build-type:     Simple

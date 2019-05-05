@@ -27,25 +27,31 @@ execCheckOption sequence alphabet order = do
             then putStrLn("KO")
         else
             case order of
-                Just n -> if isDeBruijn sequence n alphabet
-                            then putStrLn("OK")
-                        else putStrLn("KO")
+                Just n -> if n <= 0
+                            then quitFailure
+                          else do
+                            if isDeBruijn sequence n alphabet
+                                then putStrLn("OK")
+                            else putStrLn("KO")
                 Nothing -> usage >> quitFailure
 
 -- Unique Option --
 
 execUniqueOption :: String -> String -> String -> Maybe Int -> IO ()
+execUniqueOption [] _ _ _ = quitFailure
+execUniqueOption _ [] _ _ = quitFailure
 execUniqueOption seq1 seq2 alphabet order = do
         if checkSequenceConformity seq1 alphabet == False
             && checkSequenceConformity seq2 alphabet == False
             then usage >> quitFailure
         else
             case order of
-                Just n -> if isDeBruijn seq1 n alphabet
-                          && isDeBruijn seq2 n alphabet
-                          && isSameDeBruijn seq1 seq2 0
-                            then putStrLn("OK")
-                        else putStrLn("KO")
+                Just n -> if n <= 0
+                            then quitFailure
+                          else do
+                            if isDeBruijn seq1 n alphabet && isDeBruijn seq2 n alphabet && isSameDeBruijn seq1 seq2 0
+                                then putStrLn("OK")
+                            else putStrLn("KO")
                 Nothing -> usage >> quitFailure
 
 -- Clean Option --
@@ -92,8 +98,14 @@ execCleanOption :: String -> Maybe Int -> IO ()
 execCleanOption alphabet order = do 
         case order of
             Just n -> do
-                sequences <- getSequenceArray alphabet n
-                mapM_ putStrLn $ checkUSecsConform (parseUniqueSequences sequences 0) alphabet n
+                if n <= 0
+                    then quitFailure
+                else do
+                    sequences <- getSequenceArray alphabet n
+                    if sequences == []
+                        then quitFailure
+                    else
+                        mapM_ putStrLn $ checkUSecsConform (parseUniqueSequences sequences 0) alphabet n
             Nothing -> usage >> quitFailure
 
 -- Main --
